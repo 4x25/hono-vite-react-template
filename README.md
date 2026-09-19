@@ -46,21 +46,28 @@ src/
 ├── client/
 │   ├── index.tsx        # React 挂载、HashRouter、Fast Refresh、全局样式
 │   ├── routes/index.tsx # 集中声明前端路由
-│   ├── pages/           # 页面组件和对应 Less 样式
-│   │   ├── HomePage/        # 首页
+│   ├── layouts/AppLayout.tsx # 顶部导航、内容区、页脚
+│   ├── pages/           # 页面组件
+│   │   ├── HomePage/    # 模型列表、搜索和品牌筛选
+│   │   ├── ModelDetail/ # 模型详情
 │   │   └── NotFound/   # 未匹配哈希路由的 404 页面
-│   ├── styles/global.less # 全局主题和基础样式
-│   └── assets/          # 经 Vite 处理的图片等资源
+│   ├── hooks/useTheme.ts # 明暗主题与本地存储
+│   ├── data/models.ts   # 本地模型示例数据
+│   ├── styles.css      # Tailwind CSS 与 HeroUI 样式入口
+│   └── global.less     # 自定义全局样式
 └── server/
     ├── app.ts           # 创建 Hono 应用、注册首页和 API
     ├── routes/api.ts    # JSON API 路由
     ├── document.ts      # 唯一 HTML 骨架，标题、meta、资源标签
     ├── dev.ts           # 开发入口，由 Hono Vite 插件加载
     └── index.ts         # 生产入口，静态文件服务和 Node.js 监听
-public/                  # 原样复制的资源，如 favicon.svg
 ```
 
-样式源码使用 `.less`，由 Vite 编译为 CSS，生产构建统一输出 `assets/style.css`。
+组件优先使用 HeroUI v3 默认样式；Tailwind CSS v4 用于布局和必要的样式调整。`ahooks` 的 `useDebounce` 处理搜索防抖，`useLocalStorageState` 保存主题选择，未设置时跟随系统主题。品牌图标使用 `@lobehub/icons`，其他图标使用 `@gravity-ui/icons`。生产构建统一输出 `assets/style.css`。
+
+Tailwind CSS 和 HeroUI 的导入放在 `styles.css`，避免 Less 解析第三方 CSS 时出错；自定义全局样式继续写在 `global.less`。客户端入口按此顺序导入两个文件。
+
+`/#/` 展示模型列表；`/#/models/gpt-demo` 和 `/#/models/claude-demo` 展示详情。本地示例数据不代表实时模型规格。所有页面通过嵌套路由共用 `AppLayout`。
 
 新增页面放在 `client/pages/<页面名>/`，页面目录必须使用 PascalCase（首字母大写，如 `HomePage/`、`NotFound/`），禁止使用小写、kebab-case 或 snake_case 命名，页面样式就近放置，并在 `client/routes/index.tsx` 注册路由。跨页面复用组件出现后再添加 `client/components/`；新增接口放在 `server/routes`，由 `app.ts` 注册。只有实际需要共用类型时再新增 `src/shared`，不要从客户端导入服务端实现。修改页面标题或全局 meta 则编辑 `server/document.ts`。
 

@@ -1,12 +1,17 @@
 import { Route, Routes } from "react-router";
-import HomePage from "../pages/HomePage/index.tsx";
-import NotFoundPage from "../pages/NotFound/index.tsx";
+import AppLayout from "../layouts/AppLayout";
+import HomePage from "../pages/HomePage";
+import ModelDetailPage from "../pages/ModelDetail";
+import NotFoundPage from "../pages/NotFound";
 
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="*" element={<NotFoundPage />} />
+      <Route element={<AppLayout />}>
+        <Route index element={<HomePage />} />
+        <Route path="models/:modelId" element={<ModelDetailPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
     </Routes>
   );
 }

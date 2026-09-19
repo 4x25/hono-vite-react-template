@@ -14,9 +14,11 @@
     "preview": "npm run start"
   },
   "dependencies": {
+    "@gravity-ui/icons": "^2.22.0",
     "@heroui/react": "^3.2.6",
     "@heroui/styles": "^3.2.6",
     "@hono/node-server": "^2.1.1",
+    "@lobehub/icons": "^5.18.0",
     "@tailwindcss/vite": "^4.3.3",
     "ahooks": "^3.10.0",
     "hono": "^4.13.8",
